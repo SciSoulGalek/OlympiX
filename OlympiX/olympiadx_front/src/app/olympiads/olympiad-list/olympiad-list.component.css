@@ -1,0 +1,11 @@
+.card {
+  border-radius: 10px;
+}
+
+h2 {
+  font-weight: bold;
+}
+
+input.form-control {
+  border-radius: 10px;
+}

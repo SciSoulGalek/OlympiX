@@ -1,0 +1,35 @@
+<div class="container mt-5">
+
+  <h2 class="mb-4 text-center">Доступные Олимпиады</h2>
+
+  <!-- Фильтрация -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <input [(ngModel)]="countryFilter" (input)="applyFilters()" type="text" class="form-control" placeholder="Фильтр по стране">
+    </div>
+    <div class="col-md-4">
+      <input [(ngModel)]="fieldFilter" (input)="applyFilters()" type="text" class="form-control" placeholder="Фильтр по направлению">
+    </div>
+    <div class="col-md-4">
+      <input [(ngModel)]="searchText" (input)="applyFilters()" type="text" class="form-control" placeholder="Поиск по названию">
+    </div>
+  </div>
+
+  <!-- Список олимпиад -->
+  <div class="row">
+    <div class="col-md-4" *ngFor="let olympiad of filteredOlympiads">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">{{ olympiad.name }}</h5>
+          <p class="card-text">{{ olympiad.description }}</p>
+          <p><strong>Страна:</strong> {{ olympiad.country }}</p>
+          <p><strong>Направление:</strong> {{ olympiad.field }}</p>
+          <p><strong>Дата:</strong> {{ olympiad.date }}</p>
+          <p><strong>Формат:</strong> {{ olympiad.mode }}</p>
+          <button class="btn btn-success" (click)="register(olympiad.id)">Зарегистрироваться</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
