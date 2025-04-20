@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../data.service';
 import { AuthService } from '../auth.service';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 interface Olympiad {
+  id: number;
   name: string;
   description: string;
   field: string;
@@ -28,7 +29,7 @@ export class ListpageComponent implements OnInit {
   olympiads: Olympiad[] = [];
   filteredOlympiads: Olympiad[] = [];
 
-  constructor(private dataService: DataService, public auth: AuthService) {}
+  constructor(private dataService: DataService, public auth: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.dataService.getOlympiads().subscribe(data => {
@@ -42,5 +43,9 @@ export class ListpageComponent implements OnInit {
       o.name.toLowerCase().includes(this.search.toLowerCase()) &&
       (this.selectedField ? o.field === this.selectedField : true)
     );
+  }
+
+  goToDetail(id: number) {
+    this.router.navigate(['/olympiad', id]);
   }
 }

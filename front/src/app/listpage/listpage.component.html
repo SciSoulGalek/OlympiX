@@ -18,7 +18,8 @@
     <main class="olympiads-list">
       <h1>Olympiads</h1>
       <input [(ngModel)]="search" placeholder="Search..." (input)="applyFilters()" />
-      <div *ngFor="let olympiad of filteredOlympiads" class="olympiad-card">
+      <div *ngFor="let olympiad of filteredOlympiads" class="olympiad-card"
+      (click)="goToDetail(olympiad.id)" style="cursor: pointer;">
         <h3>{{ olympiad.name }}</h3>
         <p>{{ olympiad.description }}</p>
         <button>Register</button>

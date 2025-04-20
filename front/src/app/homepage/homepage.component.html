@@ -7,10 +7,11 @@
 <div class="news-container">
     <h1>Olympiad News</h1>
     <div class="news-grid">
-      <div class="news-card" *ngFor="let news of newsList">
-        <h3>{{ news.title }}</h3>
-        <p>{{ news.content }}</p>
-      </div>
+      <div class="news-card" *ngFor="let news of newsList" 
+      (click)="goToNewsDetail(news.id)" style="cursor: pointer;">
+      <h3>{{ news.title }}</h3>
+      <p>{{ news.content }}</p>
+    </div>
     </div>
     <button routerLink="/list">Explore Olympiads</button>
   </div>

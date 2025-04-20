@@ -3,6 +3,7 @@ from django.db import models
 class News(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
+    full_text = models.TextField(blank=True)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):

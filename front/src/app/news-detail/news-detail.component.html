@@ -1,0 +1,8 @@
+<button (click)="goBack()" style="margin-bottom: 10px;">← Back to News</button>
+<div *ngIf="news">
+  <h1>{{ news.title }}</h1>
+  <p><strong>Summary:</strong> {{ news.content }}</p>
+  <p><strong>Details:</strong> {{ news.full_text }}</p>
+
+  <button (click)="goBack()">Back to Homepage</button>
+</div>

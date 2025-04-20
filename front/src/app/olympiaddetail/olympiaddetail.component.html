@@ -1,0 +1,11 @@
+<button (click)="goBack()" style="margin-bottom: 10px;">← Back to List</button>
+<div *ngIf="olympiad">
+  <h2>{{ olympiad.name }}</h2>
+  <p>{{ olympiad.description }}</p>
+  <button>Register</button>
+</div>
+
+  <div *ngIf="!olympiad">
+    <p>Loading Olympiad details...</p>
+  </div>
+  
