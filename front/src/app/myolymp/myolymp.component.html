@@ -1,77 +1,22 @@
-<button (click)="goBack()" style="margin-bottom: 10px;">← Back to News</button>
-<div class="profile-container">
-    <div *ngIf="isLoggedIn">
-        <h2>Мои регистрации</h2>
+<h2>My Olympiads</h2>
 
-        <div class="tabs">
-            <button (click)="activeTab = 'current'">Текущие</button>
-            <button (click)="activeTab = 'past'">Завершённые</button>
-            <button (click)="activeTab = 'pending'">Ожидают подтверждения</button>
-            <button (click)="activeTab = 'info'">Профиль</button>
-          </div>
-          
-          <!-- Current Tab -->
-          <div *ngIf="activeTab === 'current'">
-            <h2>Текущие олимпиады</h2>
-            <div *ngFor="let reg of currentRegistrations">
-              {{ reg.olympiad.name }} – {{ getOlympiadStatus(reg.olympiad) }}
-            </div>
-          </div>
-          
-          <!-- Past Tab -->
-          <div *ngIf="activeTab === 'past'">
-            <h2>Завершённые олимпиады</h2>
-            <div *ngFor="let reg of pastRegistrations">
-              {{ reg.olympiad.name }}
-            </div>
-          </div>
-          
-          <!-- Pending Tab -->
-          <div *ngIf="activeTab === 'pending'">
-            <h2>Ожидают подтверждения</h2>
-            <div *ngFor="let reg of registrations">
-              {{ reg.olympiad.name }}
-            </div>
-          </div>
-          
-          <!-- Info Tab -->
-          <div *ngIf="activeTab === 'info'">
-            <h2>Профиль пользователя</h2>
-            <p>Имя: {{ userInfo?.first_name }}</p>
-            <p>Фамилия: {{ userInfo?.last_name }}</p>
-            <p>Логин: {{ userInfo?.username }}</p>
-          </div>
-          
+<h3>✅ Approved</h3>
+<ul>
+  <li *ngFor="let o of approvedOlympiads">
+    {{ o.olympiad.name }} ({{ o.olympiad.date }})
+  </li>
+</ul>
 
-        <!-- Текущие олимпиады -->
-        <div *ngIf="activeTab === 'current'" class="olympiad-list">
-            <div *ngFor="let reg of currentRegistrations" class="olympiad-card">
-                <h3>{{ reg.olympiad.name }}</h3>
-                <p>{{ reg.olympiad.description }}</p>
-                <div class="meta">
-                    <span class="date">Дата регистрации: {{ reg.registered_at | date }}</span>
-                    <span class="status" [class.ended]="isOlympiadEnded(reg.olympiad)">
-            {{ getOlympiadStatus(reg.olympiad) }}
-          </span>
-                </div>
-            </div>
-            <p *ngIf="currentRegistrations.length === 0">Нет текущих регистраций</p>
-        </div>
+<h3>⏳ Pending</h3>
+<ul>
+  <li *ngFor="let o of pendingOlympiads">
+    {{ o.olympiad.name }} ({{ o.olympiad.date }})
+  </li>
+</ul>
 
-        <!-- Прошедшие олимпиады -->
-        <div *ngIf="activeTab === 'past'" class="olympiad-list">
-            <div *ngFor="let reg of pastRegistrations" class="olympiad-card past">
-                <h3>{{ reg.olympiad.name }}</h3>
-                <p>{{ reg.olympiad.description }}</p>
-                <div class="meta">
-                    <span>Участвовал: {{ formatDate(reg.registered_at) }}</span>                    <span class="status">Завершена</span>
-                </div>
-            </div>
-            <p *ngIf="pastRegistrations.length === 0">Нет завершенных олимпиад</p>
-        </div>
-    </div>
-
-    <div *ngIf="!isLoggedIn" class="auth-alert">
-        <p>Доступ запрещён. Пожалуйста, <a routerLink="/login">войдите</a>.</p>
-    </div>
-</div>
+<h3>📅 Past</h3>
+<ul>
+  <li *ngFor="let o of pastOlympiads">
+    {{ o.olympiad.name }} ({{ o.olympiad.date }})
+  </li>
+</ul>

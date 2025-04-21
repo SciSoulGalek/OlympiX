@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MyolympComponent } from './myolymp.component';
+import { MyOlympiadsComponent } from './myolymp.component';
 
-describe('MyolympComponent', () => {
-  let component: MyolympComponent;
-  let fixture: ComponentFixture<MyolympComponent>;
+describe('MyOlympiadsComponent', () => {
+  let component: MyOlympiadsComponent;
+  let fixture: ComponentFixture<MyOlympiadsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MyolympComponent]
+      imports: [MyOlympiadsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MyolympComponent);
+    fixture = TestBed.createComponent(MyOlympiadsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

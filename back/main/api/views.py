@@ -121,6 +121,28 @@ class AllRegistrationsView(APIView):
         return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def my_olympiads(request):
+    user = request.user
+    registrations = OlympiadRegistration.objects.filter(user=user).select_related('olympiad')
+
+    data = []
+    for reg in registrations:
+        data.append({
+            'id': reg.id,
+            'approved': reg.approved,
+            'olympiad': {
+                'id': reg.olympiad.id,
+                'name': reg.olympiad.name,
+                'date': reg.olympiad.date,
+                'field': reg.olympiad.field,
+                'country': reg.olympiad.country,
+            }
+        })
+
+    return Response(data)
+
 # @authentication_classes([TokenAuthentication])
 # @permission_classes([IsAuthenticated])
 # def user_registrations(request):

@@ -6,14 +6,16 @@ import { OlympiaddetailComponent } from './olympiaddetail/olympiaddetail.compone
 import { NewsDetailComponent } from './news-detail/news-detail.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { MyOlympiadsComponent } from './myolymp/myolymp.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomepageComponent },
   { path: 'list', component: ListpageComponent },
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'news/:id', component: NewsDetailComponent },
   { path: 'olympiad/:id', component: OlympiaddetailComponent },
   { path: 'register/:id', component: RegistrationComponent},
-  { path: 'news/:id', component: NewsDetailComponent },
+  { path: 'my-olympiads', component: MyOlympiadsComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

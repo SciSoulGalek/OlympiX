@@ -2,6 +2,7 @@
 <div style="display: flex; justify-content: space-between; padding: 10px;">
   <button *ngIf="auth.isLoggedIn()" (click)="auth.logout()">🚪 Logout</button>
   <button *ngIf="!auth.isLoggedIn()" routerLink="/login">🔐 Login</button>
+  <button routerLink="/my-olympiads">🎓 My Olympiads</button>
   <button routerLink="/profile">Profile</button>
 </div>
 
