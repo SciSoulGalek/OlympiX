@@ -10,3 +10,57 @@
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
   }
   
+  :host {
+    display: block;
+    padding: 2rem;
+    background-color: #f4f6f9;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: center;
+  }
+  
+  select, input {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    min-width: 200px;
+    transition: border-color 0.2s;
+  }
+  
+  select:focus, input:focus {
+    outline: none;
+    border-color: #2563eb;
+  }
+  
+  .olympiad-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.25s ease;
+  }
+  
+  .olympiad-card:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .olympiad-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e1e2f;
+    margin-bottom: 0.5rem;
+  }
+  
+  .olympiad-card p {
+    color: #555;
+    line-height: 1.6;
+  }  

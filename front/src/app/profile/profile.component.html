@@ -1,0 +1,46 @@
+<button (click)="goBack()" style="margin-bottom: 10px;">← Back to News</button>
+<div class="profile-container">
+    <div *ngIf="isLoggedIn">
+        <h2>Мои регистрации</h2>
+
+        <div class="tabs">
+            <button (click)="activeTab = 'current'" [class.active]="activeTab === 'current'">
+                Текущие
+            </button>
+            <button (click)="activeTab = 'past'" [class.active]="activeTab === 'past'">
+                Прошедшие
+            </button>
+        </div>
+
+        <!-- Текущие олимпиады -->
+        <div *ngIf="activeTab === 'current'" class="olympiad-list">
+            <div *ngFor="let reg of currentRegistrations" class="olympiad-card">
+                <h3>{{ reg.olympiad.name }}</h3>
+                <p>{{ reg.olympiad.description }}</p>
+                <div class="meta">
+                    <span class="date">Дата регистрации: {{ reg.registered_at | date }}</span>
+                    <span class="status" [class.ended]="isOlympiadEnded(reg.olympiad)">
+            {{ getOlympiadStatus(reg.olympiad) }}
+          </span>
+                </div>
+            </div>
+            <p *ngIf="currentRegistrations.length === 0">Нет текущих регистраций</p>
+        </div>
+
+        <!-- Прошедшие олимпиады -->
+        <div *ngIf="activeTab === 'past'" class="olympiad-list">
+            <div *ngFor="let reg of pastRegistrations" class="olympiad-card past">
+                <h3>{{ reg.olympiad.name }}</h3>
+                <p>{{ reg.olympiad.description }}</p>
+                <div class="meta">
+                    <span>Участвовал: {{ formatDate(reg.registered_at) }}</span>                    <span class="status">Завершена</span>
+                </div>
+            </div>
+            <p *ngIf="pastRegistrations.length === 0">Нет завершенных олимпиад</p>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoggedIn" class="auth-alert">
+        <p>Доступ запрещён. Пожалуйста, <a routerLink="/login">войдите</a>.</p>
+    </div>
+</div>
