@@ -2,7 +2,8 @@
 <div *ngIf="olympiad">
   <h2>{{ olympiad.name }}</h2>
   <p>{{ olympiad.description }}</p>
-  <button>Register</button>
+  <!-- <button type="button" [routerLink]="['/register', olympiad.id]">Register</button> -->
+  <button (click)="goToRegister()">Register</button>
 </div>
 
   <div *ngIf="!olympiad">

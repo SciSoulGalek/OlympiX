@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { BehaviorSubject, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8000/api';
+  private userIdSubject = new BehaviorSubject<number | null>(null);
+  userId$ = this.userIdSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -33,5 +36,9 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return this.getToken() !== null;
+  }
+
+  getUserId(): number | null {
+    return this.userIdSubject.value;
   }
 }

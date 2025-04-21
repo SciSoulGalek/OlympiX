@@ -11,6 +11,7 @@ interface Olympiad {
   description: string;
   field: string;
   country: string;
+  date: ""
 }
 
 @Component({
@@ -22,7 +23,7 @@ interface Olympiad {
 })
 
 export class ListpageComponent implements OnInit {
-  fields: string[] = ['Math', 'Science', 'Programming', 'Art'];
+  fields: string[] = ['All fields', 'Math', 'Science', 'Programming', 'Art'];
   selectedField: string = '';
   search: string = '';
 
@@ -47,5 +48,16 @@ export class ListpageComponent implements OnInit {
 
   goToDetail(id: number) {
     this.router.navigate(['/olympiad', id]);
+  }
+
+  selectedTab = 'future';
+
+  getFilteredOlympiads() {
+    const now = new Date();
+    if (this.selectedTab === 'future') {
+      return this.olympiads.filter(o => new Date(o.date) >= now);
+    } else {
+      return this.olympiads.filter(o => new Date(o.date) < now);
+    }
   }
 }

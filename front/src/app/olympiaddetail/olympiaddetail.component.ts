@@ -2,7 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { DataService } from '../data.service';
 
 interface Olympiad {
   id: number;
@@ -15,7 +16,7 @@ interface Olympiad {
 @Component({
   selector: 'app-olympiad-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './olympiaddetail.component.html'
 })
 export class OlympiaddetailComponent implements OnInit {
@@ -24,6 +25,8 @@ export class OlympiaddetailComponent implements OnInit {
 
   olympiadId: string | null = null;
   olympiad: any = null;
+  
+  constructor(private dataService: DataService) {}
 
   ngOnInit() {
     this.olympiadId = this.route.snapshot.paramMap.get('id');
@@ -34,6 +37,11 @@ export class OlympiaddetailComponent implements OnInit {
         });
     }
   }
+
+  goToRegister() {
+    this.dataService.setOlympiad(this.olympiad);
+    this.router.navigate(['/register', this.olympiad.id]);
+  }  
 
   router = inject(Router);
 

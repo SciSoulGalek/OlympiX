@@ -1,0 +1,15 @@
+<div *ngIf="olympiad, else loading">
+  <h2>Register for {{ olympiad.name }}</h2>
+
+  <form #registerForm="ngForm" (ngSubmit)="submitRegistration(registerForm)">
+    <label for="answer">Why do you want to participate?</label>
+    <textarea id="answer" name="answer" ngModel required></textarea>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+  <ng-template #loading>
+    <p>Loading olympiad info...</p>
+  </ng-template>
+  

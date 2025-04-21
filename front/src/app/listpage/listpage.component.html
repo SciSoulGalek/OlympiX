@@ -14,6 +14,11 @@
       </select>
       <!-- Add more filters here -->
     </aside>
+
+    <div class="tabs">
+      <button (click)="selectedTab = 'future'" [class.active]="selectedTab === 'future'">Upcoming Olympiads</button>
+      <button (click)="selectedTab = 'past'" [class.active]="selectedTab === 'past'">Completed Olympiads</button>
+    </div>
   
     <main class="olympiads-list">
       <h1>Olympiads</h1>
