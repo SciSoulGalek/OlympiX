@@ -32,7 +32,11 @@ export class DataService {
     return this.http.post<any>('http://localhost:8000/api/registrations/', data);
   }
 
-  getUserInfo() {
-    return this.http.get<any>('http://localhost:8000/api/user/');
+  getProfile() {
+    return this.http.get<any>('http://localhost:8000/api/profile/');
+  }
+  
+  updateProfile(data: any) {
+    return this.http.patch<any>('http://localhost:8000/api/profile/', data);
   }
 }

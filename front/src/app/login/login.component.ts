@@ -14,30 +14,18 @@ import { RouterModule } from '@angular/router'
 export class LoginComponent {
   username = '';
   password = '';
-  error = '';
+  error: string | null = null;
 
   constructor(private auth: AuthService, private router: Router) {}
 
   login() {
     this.auth.login(this.username, this.password).subscribe({
-      next: res => {
-        this.auth.saveToken(res.token);
-        this.router.navigate(['/']); // or homepage path
+      next: (response) => {
+        this.auth.saveToken(response.token);
+        this.router.navigate(['/profile']);
       },
-      error: err => {
-        this.error = 'Invalid credentials';
-      }
-    });
-  }
-
-  register() {
-    this.auth.register(this.username, this.password).subscribe({
-      next: res => {
-        this.auth.saveToken(res.token);
-        this.router.navigate(['/']);
-      },
-      error: err => {
-        this.error = 'Registration failed';
+      error: (err) => {
+        this.error = 'Login failed. Check username and password.';
       }
     });
   }

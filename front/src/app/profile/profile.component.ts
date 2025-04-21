@@ -1,94 +1,65 @@
 // profile.component.ts
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService } from '../auth.service';
-import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { DataService } from '../data.service';
+import { Router } from '@angular/router';
+import { CommonModule } from "@angular/common";
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './profile.component.html',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  profileForm: FormGroup;
-  isEditing = false;
-  isLoading = true;
-  errorMessage: string | null = null;
-  profileData: any = null;
+  isLoggedIn = false;
+  profileForm!: FormGroup;
 
   constructor(
-    private authService: AuthService,
-    private fb: FormBuilder
-  ) {
-    this.profileForm = this.fb.group({
-      username: [{value: '', disabled: true}, Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      first_name: [''],
-      last_name: [''],
-      phone_number: [''],
-      school: [''],
-      grade: ['']
-    });
-  }
+    private fb: FormBuilder,
+    public auth: AuthService,
+    private data: DataService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    this.isLoggedIn = this.auth.isLoggedIn();
+    if (!this.isLoggedIn) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.profileForm = this.fb.group({
+      first_name: [''],
+      last_name: [''],
+      bio: [''],
+      phone_number: [''],
+      school: [''],
+      grade: [''],
+      olympiad_interests: ['']
+    });
+
     this.loadProfile();
   }
 
-  loadProfile(): void {
-    this.isLoading = true;
-    this.authService.getProfile().subscribe({
-      next: (data) => {
-        this.profileForm.patchValue({
-          username: data.username,
-          email: data.email,
-          first_name: data.first_name,
-          last_name: data.last_name,
-          phone_number: data.phone_number || '',
-          school: data.school || '',
-          grade: data.grade || ''
-        });
-        this.isLoading = false;
+  loadProfile() {
+    this.data.getProfile().subscribe({
+      next: (data: any) => {
+        this.profileForm.patchValue(data);
       },
       error: (err) => {
-        this.errorMessage = 'Failed to load profile';
-        this.isLoading = false;
-        console.error(err);
+        console.error('Failed to load profile:', err);
       }
     });
   }
 
-  toggleEdit(): void {
-    this.isEditing = !this.isEditing;
-    if (this.isEditing) {
-      this.profileForm.enable();
-      this.profileForm.get('username')?.disable(); // Keep username disabled
-    } else {
-      this.profileForm.disable();
-      this.profileForm.get('username')?.disable(); // Ensure username stays disabled
-    }
-  }
-
-  onSubmit(): void {
-    if (this.profileForm.invalid) return;
-
-    this.isLoading = true;
-    const formValue = this.profileForm.getRawValue(); // Gets all values including disabled
-    
-    this.authService.updateProfile(formValue).subscribe({
-      next: () => {
-        this.isEditing = false;
-        this.profileForm.disable();
-        this.profileForm.get('username')?.disable();
-        this.isLoading = false;
-        // Optional: Show success message
-      },
-      error: (err) => {
-        this.errorMessage = 'Failed to update profile';
-        this.isLoading = false;
-        console.error(err);
-      }
+  saveProfile() {
+    this.data.updateProfile(this.profileForm.value).subscribe({
+      next: () => alert('Profile updated successfully!'),
+      error: (err) => console.error('Error updating profile:', err)
     });
   }
 }

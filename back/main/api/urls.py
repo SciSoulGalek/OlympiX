@@ -1,9 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import OlympiadViewSet, NewsViewSet, create_registration, UserProfileDetail
+from .views import OlympiadViewSet, NewsViewSet, user_profile_view
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from .views import RegisterView, LoginView
+from .views import register_user, LoginView
 
 router = DefaultRouter()
 router.register(r'olympiads', OlympiadViewSet)
@@ -11,9 +11,9 @@ router.register(r'news', NewsViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('register/', RegisterView.as_view()),
+    path('register/', register_user),
     path('login/', LoginView.as_view()),
-    path('registrations/', create_registration),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('profile/', UserProfileDetail.as_view(), name='profile-detail')
+    # path('registrations/', create_registration),
+    path('profile/', user_profile_view, name='profile-detail'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
 ]
