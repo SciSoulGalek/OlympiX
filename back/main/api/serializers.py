@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import News
+from .models import News, OlympiadRegistration
 from .models import Olympiad
-# from .models import Registration
+from .models import Registration
 from django.contrib.auth.models import User
 from .models import UserProfile
 
@@ -21,11 +21,19 @@ class OlympiadSerializer(serializers.ModelSerializer):
         model = Olympiad
         fields = '__all__'
 
-# class RegistrationSerializer(serializers.ModelSerializer):
-#     olympiad_name = serializers.CharField(source='olympiad.name')
-#     olympiad_date = serializers.DateField(source='olympiad.date')
+class RegistrationSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    olympiad_id = serializers.IntegerField(source='olympiad.id', read_only=True)
+    
+    class Meta:
+        model = Registration
+        fields = ['id', 'username', 'olympiad_id', 'registered_at', 'status', 'answers']
 
-#     class Meta:
-#         model = Registration
-#         fields = ['id', 'status', 'answer', 'olympiad_name', 'olympiad_date']
 
+class OlympiadRegistrationSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+    olympiad = serializers.StringRelatedField()
+
+    class Meta:
+        model = OlympiadRegistration
+        fields = ['id', 'user', 'olympiad', 'answers', 'approved']

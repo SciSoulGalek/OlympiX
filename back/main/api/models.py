@@ -21,13 +21,6 @@ class Olympiad(models.Model):
     def __str__(self):
         return self.name
     
-# class Registration(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     olympiad = models.ForeignKey(Olympiad, on_delete=models.CASCADE)
-#     answer = models.TextField()
-#     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('approved', 'Approved')], default='pending')
-#     registered_at = models.DateTimeField(auto_now_add=True)
-
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100, blank=True)
@@ -41,3 +34,22 @@ class UserProfile(models.Model):
     
     def __str__(self):
         return f"{self.user.username}'s Profile"
+
+class Registration(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    olympiad = models.ForeignKey(Olympiad, on_delete=models.CASCADE)
+    registered_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, default='pending')  # pending/accepted/rejected
+    answers = models.TextField(blank=True)  # store user's answers as JSON or plain text
+
+    def __str__(self):
+        return f"{self.user.username} - {self.olympiad.name}"
+    
+class OlympiadRegistration(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    olympiad = models.ForeignKey(Olympiad, on_delete=models.CASCADE)
+    answers = models.JSONField()
+    approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.olympiad.name}"

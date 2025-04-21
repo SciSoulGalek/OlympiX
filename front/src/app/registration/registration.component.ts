@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../data.service';
@@ -25,16 +25,17 @@ interface Olympiad {
 export class RegistrationComponent implements OnInit {
   olympiad!: Olympiad;
   olympiadId!: number;
+  answers: { [key: string]: string } = {};
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private http: HttpClient,
     private dataService: DataService,
     private auth: AuthService
   ) {}
 
   ngOnInit(): void {
-    // Get olympiad from route or API (depending on your implementation)
     const id = +this.route.snapshot.paramMap.get('id')!;
     this.dataService.getOlympiadById(id).subscribe(olympiad => {
       this.olympiad = olympiad;
@@ -42,23 +43,15 @@ export class RegistrationComponent implements OnInit {
     });
   }
 
-
-  submitRegistration(form: any) {
-    const token = this.auth.getToken();
-  
-    const headers = {
-      'Authorization': `Token ${token}`
-    };
-  
-    const body = {
-      olympiadId: this.olympiad.id,
-      answer: form.value.answer
-    };
-  
-    this.http.post('http://localhost:8000/api/registrations/', body, { headers }).subscribe(
-      res => console.log('Registration successful'),
-      err => console.error('Error submitting registration:', err)
-    );
+  register() {
+    this.http.post(`http://localhost:8000/api/registration/olympiad/${this.olympiadId}/`, {
+      answers: this.answers
+    }).subscribe({
+      next: () => alert('Registration submitted!'),
+      error: err => {
+        console.error('Registration failed:', err);
+        alert('Failed to register.');
+      }
+    });
   }
-  
 }

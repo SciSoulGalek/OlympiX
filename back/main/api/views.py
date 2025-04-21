@@ -1,8 +1,10 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
-from .models import News, Olympiad, UserProfile
+from .models import News, Olympiad, OlympiadRegistration, Registration, UserProfile
 from .serializers import NewsSerializer
 from .serializers import OlympiadSerializer
 from .serializers import UserProfileSerializer
+from .serializers import OlympiadRegistrationSerializer
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
@@ -13,6 +15,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+
+from rest_framework.permissions import IsAdminUser
+
 
 # from rest_framework_simplejwt.views import TokenObtainPairView
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -69,21 +74,52 @@ class OlympiadViewSet(viewsets.ModelViewSet):
     queryset = Olympiad.objects.all()
     serializer_class = OlympiadSerializer
 
+#Registrations
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def create_registration(request):
+def register_for_olympiad(request, olympiad_id):
     user = request.user
-    olympiad_id = request.data.get('olympiadId')
-    answer = request.data.get('answer')
+    answers = request.data.get('answers', '')
+    
+    olympiad = get_object_or_404(Olympiad, id=olympiad_id)
 
-    # Proceed to create registration
-    # Example:
-    from .models import Registration, Olympiad
-    olympiad = Olympiad.objects.get(id=olympiad_id)
-    Registration.objects.create(user=user, olympiad=olympiad, answer=answer, status='Pending')
+    registration, created = OlympiadRegistration.objects.get_or_create(
+        user=user, olympiad=olympiad,
+        defaults={'answers': answers}
+    )
 
-    return Response({'message': 'Registration submitted successfully'})@api_view(['GET'])
+    if not created:
+        return Response({'detail': 'Already registered.'}, status=400)
+
+    return Response({'detail': 'Registration submitted for review.'})
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def list_pending_registrations(request):
+    pending = Registration.objects.filter(status='Pending')
+    data = [
+        {
+            'id': reg.id,
+            'username': reg.user.username,
+            'olympiad_id': reg.olympiad.id,
+            'olympiad_name': reg.olympiad.name,
+            'answer': reg.answer,
+            'registered_at': reg.registered_at
+        }
+        for reg in pending
+    ]
+    return Response(data)
+
+
+class AllRegistrationsView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        registrations = OlympiadRegistration.objects.all()
+        serializer = OlympiadRegistrationSerializer(registrations, many=True)
+        return Response(serializer.data)
+
 
 # @authentication_classes([TokenAuthentication])
 # @permission_classes([IsAuthenticated])
