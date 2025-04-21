@@ -1,46 +1,74 @@
-<button (click)="goBack()" style="margin-bottom: 10px;">← Back to News</button>
+<!-- profile.component.html -->
 <div class="profile-container">
-    <div *ngIf="isLoggedIn">
-        <h2>Мои регистрации</h2>
-
-        <div class="tabs">
-            <button (click)="activeTab = 'current'" [class.active]="activeTab === 'current'">
-                Текущие
-            </button>
-            <button (click)="activeTab = 'past'" [class.active]="activeTab === 'past'">
-                Прошедшие
-            </button>
-        </div>
-
-        <!-- Текущие олимпиады -->
-        <div *ngIf="activeTab === 'current'" class="olympiad-list">
-            <div *ngFor="let reg of currentRegistrations" class="olympiad-card">
-                <h3>{{ reg.olympiad.name }}</h3>
-                <p>{{ reg.olympiad.description }}</p>
-                <div class="meta">
-                    <span class="date">Дата регистрации: {{ reg.registered_at | date }}</span>
-                    <span class="status" [class.ended]="isOlympiadEnded(reg.olympiad)">
-            {{ getOlympiadStatus(reg.olympiad) }}
-          </span>
-                </div>
-            </div>
-            <p *ngIf="currentRegistrations.length === 0">Нет текущих регистраций</p>
-        </div>
-
-        <!-- Прошедшие олимпиады -->
-        <div *ngIf="activeTab === 'past'" class="olympiad-list">
-            <div *ngFor="let reg of pastRegistrations" class="olympiad-card past">
-                <h3>{{ reg.olympiad.name }}</h3>
-                <p>{{ reg.olympiad.description }}</p>
-                <div class="meta">
-                    <span>Участвовал: {{ formatDate(reg.registered_at) }}</span>                    <span class="status">Завершена</span>
-                </div>
-            </div>
-            <p *ngIf="pastRegistrations.length === 0">Нет завершенных олимпиад</p>
-        </div>
+  <h2>Your Profile</h2>
+  
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading profile...</p>
+  </div>
+  
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  
+  <form *ngIf="!isLoading" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <!-- Username -->
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" class="form-control" formControlName="username" readonly>
     </div>
-
-    <div *ngIf="!isLoggedIn" class="auth-alert">
-        <p>Доступ запрещён. Пожалуйста, <a routerLink="/login">войдите</a>.</p>
+    
+    <!-- Email -->
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" class="form-control" formControlName="email">
+      <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="text-danger">
+        Please enter a valid email
+      </div>
     </div>
+    
+    <!-- Name Fields -->
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <label>First Name</label>
+        <input type="text" class="form-control" formControlName="first_name">
+      </div>
+      <div class="col-md-6 form-group">
+        <label>Last Name</label>
+        <input type="text" class="form-control" formControlName="last_name">
+      </div>
+    </div>
+    
+    <!-- Profile Fields -->
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" class="form-control" formControlName="phone_number">
+    </div>
+    
+    <div class="form-group">
+      <label>School</label>
+      <input type="text" class="form-control" formControlName="school">
+    </div>
+    
+    <div class="form-group">
+      <label>Grade</label>
+      <input type="number" class="form-control" formControlName="grade">
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="form-group button-group">
+      <button *ngIf="!isEditing" type="button" class="btn btn-primary" (click)="toggleEdit()">
+        Edit Profile
+      </button>
+      
+      <div *ngIf="isEditing" class="edit-actions">
+        <button type="submit" class="btn btn-success" [disabled]="profileForm.invalid || isLoading">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
+          Save Changes
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="toggleEdit()" [disabled]="isLoading">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </form>
 </div>

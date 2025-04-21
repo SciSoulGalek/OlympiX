@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +42,17 @@ export class AuthService {
 
   getUserId(): number | null {
     return this.userIdSubject.value;
+  }
+
+  getProfile(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/profile/`, { headers });
+  }
+
+  updateProfile(profileData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/profile/`, profileData);
   }
 }

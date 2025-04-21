@@ -44,25 +44,21 @@ export class RegistrationComponent implements OnInit {
 
 
   submitRegistration(form: any) {
-    const userId = this.auth.getUserId();
-    
-    if (form.valid) {
-      const registrationData = {
-        user: userId,
-        olympiad: this.olympiadId,
-        answer: form.value.answer,
-      };
+    const token = this.auth.getToken();
   
-      this.http.post('http://localhost:8000/api/registrations/', registrationData).subscribe({
-        next: () => {
-          alert('Registration submitted!');
-        },
-        error: (err) => {
-          console.error('Registration failed', err);
-          alert('Error submitting registration.');
-        }
-      });
-    }
+    const headers = {
+      'Authorization': `Token ${token}`
+    };
+  
+    const body = {
+      olympiadId: this.olympiad.id,
+      answer: form.value.answer
+    };
+  
+    this.http.post('http://localhost:8000/api/registrations/', body, { headers }).subscribe(
+      res => console.log('Registration successful'),
+      err => console.error('Error submitting registration:', err)
+    );
   }
   
 }

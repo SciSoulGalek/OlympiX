@@ -1,94 +1,94 @@
+// profile.component.ts
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { DataService } from '../data.service';
-import { Router } from '@angular/router';
-import { CommonModule } from "@angular/common";
-
-interface Registration {
-  id: number;
-  registered_at: string;
-  olympiad: {
-    id: number;
-    name: string;
-    description: string;
-    start_date: string;
-    end_date: string;
-    field: string;
-  };
-}
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './profile.component.html',
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  isLoggedIn = false;
-  activeTab: 'current' | 'past' = 'current';
-  registrations: Registration[] = [];
-  currentRegistrations: Registration[] = [];
-  pastRegistrations: Registration[] = [];
+  profileForm: FormGroup;
+  isEditing = false;
+  isLoading = true;
+  errorMessage: string | null = null;
+  profileData: any = null;
 
   constructor(
-      public auth: AuthService,
-      private data: DataService,
-      private router: Router
-  ) {}
-
-  ngOnInit() {
-    this.isLoggedIn = this.auth.isLoggedIn();
-    if (!this.isLoggedIn) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    this.loadRegistrations();
+    private authService: AuthService,
+    private fb: FormBuilder
+  ) {
+    this.profileForm = this.fb.group({
+      username: [{value: '', disabled: true}, Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      first_name: [''],
+      last_name: [''],
+      phone_number: [''],
+      school: [''],
+      grade: ['']
+    });
   }
 
-  loadRegistrations() {
-    this.data.getUserRegistrations().subscribe({
-      next: (data: any) => {
-        this.registrations = data;
-        this.filterRegistrations();
+  ngOnInit(): void {
+    this.loadProfile();
+  }
+
+  loadProfile(): void {
+    this.isLoading = true;
+    this.authService.getProfile().subscribe({
+      next: (data) => {
+        this.profileForm.patchValue({
+          username: data.username,
+          email: data.email,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          phone_number: data.phone_number || '',
+          school: data.school || '',
+          grade: data.grade || ''
+        });
+        this.isLoading = false;
       },
-      error: (err) => console.error('Ошибка загрузки:', err)
+      error: (err) => {
+        this.errorMessage = 'Failed to load profile';
+        this.isLoading = false;
+        console.error(err);
+      }
     });
   }
 
-  filterRegistrations() {
-    const now = new Date();
-    this.currentRegistrations = this.registrations.filter(reg => {
-      return new Date(reg.olympiad.end_date) > now;
+  toggleEdit(): void {
+    this.isEditing = !this.isEditing;
+    if (this.isEditing) {
+      this.profileForm.enable();
+      this.profileForm.get('username')?.disable(); // Keep username disabled
+    } else {
+      this.profileForm.disable();
+      this.profileForm.get('username')?.disable(); // Ensure username stays disabled
+    }
+  }
+
+  onSubmit(): void {
+    if (this.profileForm.invalid) return;
+
+    this.isLoading = true;
+    const formValue = this.profileForm.getRawValue(); // Gets all values including disabled
+    
+    this.authService.updateProfile(formValue).subscribe({
+      next: () => {
+        this.isEditing = false;
+        this.profileForm.disable();
+        this.profileForm.get('username')?.disable();
+        this.isLoading = false;
+        // Optional: Show success message
+      },
+      error: (err) => {
+        this.errorMessage = 'Failed to update profile';
+        this.isLoading = false;
+        console.error(err);
+      }
     });
-
-    this.pastRegistrations = this.registrations.filter(reg => {
-      return new Date(reg.olympiad.end_date) <= now;
-    });
-  }
-
-  isOlympiadEnded(olympiad: any): boolean {
-    return new Date(olympiad.end_date) < new Date();
-  }
-
-  getOlympiadStatus(olympiad: any): string {
-    const now = new Date();
-    const start = new Date(olympiad.start_date);
-    const end = new Date(olympiad.end_date);
-
-    if (now < start) return 'Ожидается';
-    if (now >= start && now <= end) return 'В процессе';
-    return 'Завершена';
-  }
-  
-  formatDate(date: string | Date): string {
-    if (!date) return '';
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
-    return dateObj.toLocaleDateString('ru-RU');
-  }
-
-  goBack() {
-    this.router.navigate(['/home']);
   }
 }

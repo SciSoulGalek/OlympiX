@@ -32,17 +32,7 @@ export class DataService {
     return this.http.post<any>('http://localhost:8000/api/registrations/', data);
   }
 
-  submitRegistration(registrationData: any) {
-    const token = localStorage.getItem('token');
-    return this.http.post(
-      'http://localhost:8000/api/registrations/',
-      registrationData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    );
+  getUserInfo() {
+    return this.http.get<any>('http://localhost:8000/api/user/');
   }
-  
 }

@@ -24,7 +24,17 @@ class Olympiad(models.Model):
 class Registration(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     olympiad = models.ForeignKey(Olympiad, on_delete=models.CASCADE)
-    answers = models.TextField()
+    answer = models.TextField()
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('approved', 'Approved')], default='pending')
     registered_at = models.DateTimeField(auto_now_add=True)
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=20, blank=True)
+    school = models.CharField(max_length=100, blank=True)
+    grade = models.IntegerField(null=True, blank=True)
+    olympiad_interests = models.TextField(blank=True)
+    # Add any other fields needed for Olympiad registration
+    
+    def __str__(self):
+        return f"{self.user.username}'s Profile"

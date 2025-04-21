@@ -1,10 +1,13 @@
-from rest_framework import viewsets
-from .models import News, Olympiad, Registration
+from rest_framework import viewsets, generics, permissions
+from .models import News, Olympiad, Registration, UserProfile
 from .serializers import NewsSerializer
 from .serializers import OlympiadSerializer
 from .serializers import RegistrationSerializer
-from rest_framework.decorators import api_view, permission_classes
+from .serializers import UserSerializer
+from .serializers import UserProfileSerializer
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
@@ -66,20 +69,59 @@ def get_queryset(self):
     return Registration.objects.filter(user=self.request.user)
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def create_registration(request):
     user = request.user
     olympiad_id = request.data.get('olympiadId')
     answer = request.data.get('answer')
 
-    try:
-        olympiad = Olympiad.objects.get(id=olympiad_id)
-        registration = Registration.objects.create(
-            user=user,
-            olympiad=olympiad,
-            answer=answer,
-            status='pending'
-        )
-        return Response({'message': 'Registration submitted'}, status=status.HTTP_201_CREATED)
-    except Olympiad.DoesNotExist:
-        return Response({'error': 'Olympiad not found'}, status=status.HTTP_404_NOT_FOUND)
+    # Proceed to create registration
+    # Example:
+    from .models import Registration, Olympiad
+    olympiad = Olympiad.objects.get(id=olympiad_id)
+    Registration.objects.create(user=user, olympiad=olympiad, answer=answer, status='Pending')
+
+    return Response({'message': 'Registration submitted successfully'})@api_view(['GET'])
+
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def user_registrations(request):
+    from .models import Registration
+    from .serializers import RegistrationSerializer
+    from datetime import date
+
+    user = request.user
+    today = date.today()
+
+    registrations = Registration.objects.filter(user=user).select_related('olympiad')
+    
+    pending = []
+    registered = []
+    completed = []
+
+    for reg in registrations:
+        olympiad_date = reg.olympiad.date
+        serialized = RegistrationSerializer(reg).data
+
+        if reg.status == 'Pending':
+            pending.append(serialized)
+        elif reg.status == 'Registered' and olympiad_date >= today:
+            registered.append(serialized)
+        elif olympiad_date < today:
+            completed.append(serialized)
+
+    return Response({
+        'pending': pending,
+        'registered': registered,
+        'completed': completed
+    })
+
+class UserProfileDetail(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserProfileSerializer
+    
+    def get_object(self):
+        # Get or create profile if it doesn't exist
+        profile, created = UserProfile.objects.get_or_create(user=self.request.user)
+        return profile
