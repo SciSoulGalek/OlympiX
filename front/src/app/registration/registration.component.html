@@ -1,8 +1,9 @@
 <button (click)="goBack()" class="back-btn">← Назад к списку</button>
 
-<div *ngIf="registrationStatus" class="registration-status">
+
+<!--<div *ngIf="registrationStatus" class="registration-status">
   <p>{{ registrationStatus }}</p>
-</div>
+</div>-->
 
 <form (submit)="register(); $event.preventDefault()">
   <label>Why do you want to join?</label>

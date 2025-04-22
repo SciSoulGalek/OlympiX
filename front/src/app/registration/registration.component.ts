@@ -44,7 +44,7 @@ export class RegistrationComponent implements OnInit {
     this.dataService.getOlympiadById(id).subscribe(olympiad => {
       this.olympiad = olympiad;
       this.olympiadId = olympiad.id;
-  
+
       // 🔽 NEW: Check if user has already registered
       this.http.get<any[]>(`http://localhost:8000/api/registration/olympiad/${this.olympiadId}/`, { withCredentials: true })
         .subscribe(registrations => {
@@ -74,6 +74,7 @@ export class RegistrationComponent implements OnInit {
 
   register() {
     this.isRegistering = true;
+
     this.http.post(`http://localhost:8000/api/registration/olympiad/${this.olympiadId}/`, {
       answers: this.answers
     }, { withCredentials: true }).subscribe({
@@ -85,15 +86,22 @@ export class RegistrationComponent implements OnInit {
         } else {
           this.registrationStatus = 'Unexpected response.';
         }
+
+
+        window.alert(this.registrationStatus);
+
         this.isRegistering = false;
       },
       error: () => {
         this.registrationStatus = 'Failed to register.';
+        window.alert(this.registrationStatus);
         this.isRegistering = false;
       }
     });
   }
-  
+
+
+
 
   goBack() {
     this.router.navigate([`/olympiad/${this.olympiadId}`]);
