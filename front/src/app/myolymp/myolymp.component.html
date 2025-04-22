@@ -1,22 +1,33 @@
-<h2>My Olympiads</h2>
+<div class="my-olympiads">
+  <h2>📚 My Olympiads</h2>
 
-<h3>✅ Approved</h3>
-<ul>
-  <li *ngFor="let o of approvedOlympiads">
-    {{ o.olympiad.name }} ({{ o.olympiad.date }})
-  </li>
-</ul>
+  <div class="olympiad-section">
+    <h3>✅ Approved</h3>
+    <ul>
+      <li *ngFor="let o of approvedOlympiads">
+        <span class="name">{{ o.olympiad.name }}</span>
+        <span class="date">({{ o.olympiad.date }})</span>
+      </li>
+    </ul>
+  </div>
 
-<h3>⏳ Pending</h3>
-<ul>
-  <li *ngFor="let o of pendingOlympiads">
-    {{ o.olympiad.name }} ({{ o.olympiad.date }})
-  </li>
-</ul>
+  <div class="olympiad-section">
+    <h3>⏳ Pending</h3>
+    <ul>
+      <li *ngFor="let o of pendingOlympiads">
+        <span class="name">{{ o.olympiad.name }}</span>
+        <span class="date">({{ o.olympiad.date }})</span>
+      </li>
+    </ul>
+  </div>
 
-<h3>📅 Past</h3>
-<ul>
-  <li *ngFor="let o of pastOlympiads">
-    {{ o.olympiad.name }} ({{ o.olympiad.date }})
-  </li>
-</ul>
+  <div class="olympiad-section">
+    <h3>📅 Past</h3>
+    <ul>
+      <li *ngFor="let o of pastOlympiads">
+        <span class="name">{{ o.olympiad.name }}</span>
+        <span class="date">({{ o.olympiad.date }})</span>
+      </li>
+    </ul>
+  </div>
+</div>

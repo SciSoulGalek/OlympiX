@@ -1,85 +1,137 @@
-.olympiad-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 12px;
-    margin: 10px 0;
-    transition: box-shadow 0.3s;
-  }
-  
-  .olympiad-card:hover {
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  :host {
-    display: block;
-    padding: 2rem;
-    background-color: #f4f6f9;
-    font-family: 'Segoe UI', Roboto, sans-serif;
-  }
-  
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    align-items: center;
-  }
-  
-  select, input {
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    min-width: 200px;
-    transition: border-color 0.2s;
-  }
-  
-  select:focus, input:focus {
-    outline: none;
-    border-color: #2563eb;
-  }
-  
-  .olympiad-card {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.25s ease;
-  }
-  
-  .olympiad-card:hover {
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-  }
-  
-  .olympiad-card h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #1e1e2f;
-    margin-bottom: 0.5rem;
-  }
-  
-  .olympiad-card p {
-    color: #555;
-    line-height: 1.6;
-  }  
+/* TOP NAV */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2563eb;
+  padding: 1rem 2rem;
+  color: white;
+}
 
-  .tabs {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .tabs button {
-    padding: 8px 12px;
-    border: none;
-    background-color: #eee;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .tabs button.active {
-    background-color: #007bff;
-    color: white;
-  }
-  
+.top-nav button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  margin-left: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.top-nav button:hover {
+  opacity: 0.8;
+}
+
+/* MAIN LAYOUT */
+.container {
+  display: flex;
+  padding: 2rem;
+  gap: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* FILTER SIDEBAR */
+.filters {
+  width: 220px;
+  background-color: #f1f1f1;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.filters h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.filters label,
+.filters select {
+  display: block;
+  margin-bottom: 1rem;
+  width: 100%;
+  font-size: 1rem;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin: 0 auto 1rem;
+}
+
+.tabs button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #2563eb;
+  background-color: white;
+  color: #2563eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.tabs button.active,
+.tabs button:hover {
+  background-color: #2563eb;
+  color: white;
+}
+
+/* MAIN CONTENT */
+.olympiads-list {
+  flex: 1;
+}
+
+.olympiads-list h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.olympiads-list input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* CARD STYLES */
+.olympiad-card {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.olympiad-card:hover {
+  transform: scale(1.02);
+}
+
+.olympiad-card h3 {
+  font-size: 1.4rem;
+  color: #2563eb;
+  margin-bottom: 0.5rem;
+}
+
+.olympiad-card p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+.olympiad-card button {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.olympiad-card button:hover {
+  background-color: #303f9f;
+}

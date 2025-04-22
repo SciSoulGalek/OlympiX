@@ -7,7 +7,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-news-detail',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './news-detail.component.html'
+  templateUrl: './news-detail.component.html',
+  styleUrls: ['./news-detail.component.css']
 })
 export class NewsDetailComponent implements OnInit {
   route = inject(ActivatedRoute);

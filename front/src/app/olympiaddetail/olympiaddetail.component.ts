@@ -17,7 +17,8 @@ interface Olympiad {
   selector: 'app-olympiad-detail',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './olympiaddetail.component.html'
+  templateUrl: './olympiaddetail.component.html',
+  styleUrls: ['./olympiaddetail.component.css']
 })
 export class OlympiaddetailComponent implements OnInit {
   route = inject(ActivatedRoute);
@@ -25,7 +26,7 @@ export class OlympiaddetailComponent implements OnInit {
 
   olympiadId: string | null = null;
   olympiad: any = null;
-  
+
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
@@ -41,7 +42,7 @@ export class OlympiaddetailComponent implements OnInit {
   goToRegister() {
     this.dataService.setOlympiad(this.olympiad);
     this.router.navigate(['/register', this.olympiad.id]);
-  }  
+  }
 
   router = inject(Router);
 

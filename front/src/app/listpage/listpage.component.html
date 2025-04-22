@@ -1,34 +1,34 @@
 <!-- Top navigation -->
-<div style="display: flex; justify-content: space-between; padding: 10px;">
+<div class="top-nav">
   <button routerLink="/">🏠 Home</button>
-  <button *ngIf="auth.isLoggedIn()" (click)="auth.logout()">🚪 Logout</button>
-  <button *ngIf="!auth.isLoggedIn()" routerLink="/login">🔐 Login</button>
+  <div>
+    <button *ngIf="auth.isLoggedIn()" (click)="auth.logout()">🚪 Logout</button>
+    <button *ngIf="!auth.isLoggedIn()" routerLink="/login">🔐 Login</button>
+  </div>
 </div>
 
 <div class="container">
-    <aside class="filters">
-      <h2>Filters</h2>
-      <label>Field:</label>
-      <select [(ngModel)]="selectedField" (change)="applyFilters()">
-        <option *ngFor="let field of fields">{{ field }}</option>
-      </select>
-      <!-- Add more filters here -->
-    </aside>
+  <aside class="filters">
+    <h2></h2>
+    <label>Направление:</label>
+    <select [(ngModel)]="selectedField" (change)="applyFilters()">
+      <option *ngFor="let field of fields">{{ field }}</option>
+    </select>
+  </aside>
 
-    <div class="tabs">
-      <button (click)="selectedTab = 'future'" [class.active]="selectedTab === 'future'">Upcoming Olympiads</button>
-      <button (click)="selectedTab = 'past'" [class.active]="selectedTab === 'past'">Completed Olympiads</button>
-    </div>
-  
-    <main class="olympiads-list">
-      <h1>Olympiads</h1>
-      <input [(ngModel)]="search" placeholder="Search..." (input)="applyFilters()" />
-      <div *ngFor="let olympiad of filteredOlympiads" class="olympiad-card"
-      (click)="goToDetail(olympiad.id)" style="cursor: pointer;">
-        <h3>{{ olympiad.name }}</h3>
-        <p>{{ olympiad.description }}</p>
-        <button>Register</button>
-      </div>
-    </main>
+  <div class="tabs">
+    <button (click)="selectedTab = 'future'" [class.active]="selectedTab === 'future'">Upcoming Olympiads</button>
+    <button (click)="selectedTab = 'past'" [class.active]="selectedTab === 'past'">Completed Olympiads</button>
   </div>
-  
+
+  <main class="olympiads-list">
+    <h1>Olympiads</h1>
+    <input [(ngModel)]="search" placeholder="Поиск..." (input)="applyFilters()" />
+
+    <div *ngFor="let olympiad of filteredOlympiads" class="olympiad-card" (click)="goToDetail(olympiad.id)">
+      <h3>{{ olympiad.name }}</h3>
+      <p>{{ olympiad.description }}</p>
+      <button>Register</button>
+    </div>
+  </main>
+</div>

@@ -1,12 +1,16 @@
-<button (click)="goBack()" style="margin-bottom: 10px;">← Back to List</button>
-<div *ngIf="olympiad">
-  <h2>{{ olympiad.name }}</h2>
-  <p>{{ olympiad.description }}</p>
-  <!-- <button type="button" [routerLink]="['/register', olympiad.id]">Register</button> -->
-  <button (click)="goToRegister()">Register</button>
-</div>
+<div class="olympiad-details">
 
-  <div *ngIf="!olympiad">
-    <p>Loading Olympiad details...</p>
+  <button (click)="goBack()" class="back-btn">← Назад к списку</button>
+
+  <div *ngIf="olympiad" class="olympiad-card">
+    <h2>{{ olympiad.name }}</h2>
+    <p class="description">{{ olympiad.description }}</p>
+
+    <button (click)="goToRegister()" class="register-btn">Зарегистрироваться</button>
   </div>
-  
+
+  <div *ngIf="!olympiad" class="loading">
+    <p>Загрузка данных олимпиады...</p>
+  </div>
+
+</div>

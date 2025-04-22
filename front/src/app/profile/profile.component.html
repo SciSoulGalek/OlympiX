@@ -1,33 +1,42 @@
-<h2>Мой Профиль</h2>
+<div class="profile-container">
+  <h2>Мой Профиль</h2>
 
-<form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
-  <label>Имя:
-    <input formControlName="first_name" />
-  </label>
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+    <div class="form-group">
+      <label>Имя</label>
+      <input formControlName="first_name" />
+    </div>
 
-  <label>Фамилия:
-    <input formControlName="last_name" />
-  </label>
+    <div class="form-group">
+      <label>Фамилия</label>
+      <input formControlName="last_name" />
+    </div>
 
-  <label>Биография:
-    <textarea formControlName="bio"></textarea>
-  </label>
+    <div class="form-group">
+      <label>Биография</label>
+      <textarea formControlName="bio"></textarea>
+    </div>
 
-  <label>Телефон:
-    <input formControlName="phone_number" />
-  </label>
+    <div class="form-group">
+      <label>Телефон</label>
+      <input formControlName="phone_number" />
+    </div>
 
-  <label>Школа:
-    <input formControlName="school" />
-  </label>
+    <div class="form-group">
+      <label>Школа</label>
+      <input formControlName="school" />
+    </div>
 
-  <label>Класс:
-    <input type="number" formControlName="grade" />
-  </label>
+    <div class="form-group">
+      <label>Класс</label>
+      <input type="number" formControlName="grade" />
+    </div>
 
-  <label>Интересы по олимпиадам:
-    <textarea formControlName="olympiad_interests"></textarea>
-  </label>
+    <div class="form-group">
+      <label>Интересы по олимпиадам</label>
+      <textarea formControlName="olympiad_interests"></textarea>
+    </div>
 
-  <button type="submit">Сохранить</button>
-</form>
+    <button type="submit" class="save-btn">Сохранить</button>
+  </form>
+</div>
