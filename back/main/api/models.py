@@ -14,6 +14,7 @@ class News(models.Model):
 class Olympiad(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
+    full_description = models.TextField(null=True, blank=True)
     field = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     date = models.DateField(default=date.today)
@@ -48,6 +49,12 @@ class Registration(models.Model):
         return f"{self.user.username} - {self.olympiad.name}"
     
 class OlympiadRegistration(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('completed', 'Completed'),
+    ]
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     olympiad = models.ForeignKey(Olympiad, on_delete=models.CASCADE)
     answers = models.JSONField()

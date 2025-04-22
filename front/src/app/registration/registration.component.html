@@ -1,5 +1,9 @@
 <button (click)="goBack()" class="back-btn">← Назад к списку</button>
 
+<div *ngIf="registrationStatus" class="registration-status">
+  <p>{{ registrationStatus }}</p>
+</div>
+
 <form (submit)="register(); $event.preventDefault()">
   <label>Why do you want to join?</label>
   <input [(ngModel)]="answers['question1']" name="question1" required />
@@ -7,5 +11,7 @@
   <label>What is your experience?</label>
   <input [(ngModel)]="answers['question2']" name="question2" required />
 
-  <button type="submit">Submit</button>
+  <button type="submit" [disabled]="isRegistering || isRegistered">
+    Submit
+  </button>
 </form>

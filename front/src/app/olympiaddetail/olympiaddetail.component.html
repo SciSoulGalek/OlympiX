@@ -6,12 +6,19 @@
     <h2>{{ olympiad.name }}</h2>
     <p class="description">{{ olympiad.description }}</p>
 
+    <p><strong>Field:</strong> {{ olympiad.field }}</p>
+    <p><strong>Country:</strong> {{ olympiad.country }}</p>
+    <p><strong>Date:</strong> {{ olympiad.date }}</p>
+
     <div *ngIf="isCompleted()">
       <p><strong>Status:</strong> Completed</p>
       <p *ngIf="olympiad.winner">
         <strong>Winner:</strong> {{ olympiad.winner }}
       </p>
     </div>
+
+    <h2>Full Description</h2>
+    <p>{{ olympiad.full_description }}</p>
     
     <div *ngIf="!isCompleted()">
       <p><strong>Status:</strong> Upcoming</p>

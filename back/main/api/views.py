@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from .models import News, Olympiad, OlympiadRegistration, Registration, UserProfile
@@ -79,9 +80,8 @@ class OlympiadViewSet(viewsets.ModelViewSet):
 @permission_classes([IsAuthenticated])
 def register_for_olympiad(request, olympiad_id):
     user = request.user
-    answers = request.data.get('answers', '')
-    
     olympiad = get_object_or_404(Olympiad, id=olympiad_id)
+    answers = request.data.get('answers', '')
 
     registration, created = OlympiadRegistration.objects.get_or_create(
         user=user, olympiad=olympiad,
@@ -89,9 +89,9 @@ def register_for_olympiad(request, olympiad_id):
     )
 
     if not created:
-        return Response({'detail': 'Already registered.'}, status=400)
+        return Response({'status': 'already_registered'}, status=200)
 
-    return Response({'detail': 'Registration submitted for review.'})
+    return Response({'status': 'registered'}, status=201)
 
 
 @api_view(['GET'])
@@ -143,34 +143,23 @@ def my_olympiads(request):
 
     return Response(data)
 
-# @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
-# def user_registrations(request):
-#     from .models import Registration
-#     from datetime import date
+@permission_classes([IsAuthenticated])
+def olympiad_registration_status(request, olympiad_id):
+    # Get the current logged-in user
+    user = request.user
 
-#     user = request.user
-#     today = date.today()
+    # Get the Olympiad object
+    olympiad = get_object_or_404(Olympiad, id=olympiad_id)
 
-#     registrations = Registration.objects.filter(user=user).select_related('olympiad')
-    
-#     pending = []
-#     registered = []
-#     completed = []
-
-#     for reg in registrations:
-#         olympiad_date = reg.olympiad.date
-#         serialized = RegistrationSerializer(reg).data
-
-#         if reg.status == 'Pending':
-#             pending.append(serialized)
-#         elif reg.status == 'Registered' and olympiad_date >= today:
-#             registered.append(serialized)
-#         elif olympiad_date < today:
-#             completed.append(serialized)
-
-#     return Response({
-#         'pending': pending,
-#         'registered': registered,
-#         'completed': completed
-#     })
+    # Check if the user is registered for the Olympiad
+    try:
+        registration = Registration.objects.get(olympiad=olympiad, user=user)
+        if registration.status == 'pending':
+            return JsonResponse('pending', safe=False)
+        elif registration.status == 'approved':
+            return JsonResponse('approved', safe=False)
+        else:
+            return JsonResponse('not_registered', safe=False)
+    except Registration.DoesNotExist:
+        # If the user has not registered yet
+        return JsonResponse('not_registered', safe=False)

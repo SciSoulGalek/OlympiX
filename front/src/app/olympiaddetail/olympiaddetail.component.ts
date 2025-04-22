@@ -8,9 +8,12 @@ import { DataService } from '../data.service';
 interface Olympiad {
   id: number;
   name: string;
-  description: string;
+  short_description: string;
+  full_description: string;
   field: string;
   country: string;
+  date: string;
+  winner: string | null;
 }
 
 @Component({

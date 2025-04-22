@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 
 @Component({
   selector: 'app-my-olympiads',
   templateUrl: './myolymp.component.html',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   styleUrls: ['./myolymp.component.css']
 })
 export class MyOlympiadsComponent implements OnInit {

@@ -2,6 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+interface Olympiad {
+  id: number;
+  name: string;
+  short_description: string;
+  full_description: string;
+  field: string;
+  country: string;
+  date: string;
+  winner: string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class DataService {
   private olympiad: any;
@@ -30,6 +41,10 @@ export class DataService {
 
   registerOlympiad(data: any): Observable<any> {
     return this.http.post<any>('http://localhost:8000/api/registrations/', data);
+  }
+
+  getOlympiadRegistrationStatus(olympiadId: number) {
+    return this.http.get<string>(`http://localhost:8000/api/registration/olympiad/${olympiadId}/status/`);
   }
 
   getProfile() {
