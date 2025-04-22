@@ -25,6 +25,7 @@
 /* MAIN LAYOUT */
 .container {
   display: flex;
+  align-items: flex-start;
   padding: 2rem;
   gap: 2rem;
   font-family: 'Segoe UI', sans-serif;
@@ -55,8 +56,10 @@
 /* TABS */
 .tabs {
   display: flex;
+  flex-direction: column; /* Center the tabs */
   gap: 1rem;
-  margin: 0 auto 1rem;
+  margin-bottom: 1rem;
+  padding-top: 1rem;
 }
 
 .tabs button {
@@ -68,6 +71,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
+  flex-shrink: 0; /* Prevent growing */
 }
 
 .tabs button.active,
@@ -134,4 +138,20 @@
 
 .olympiad-card button:hover {
   background-color: #303f9f;
+}
+
+.tags {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
 }

@@ -6,7 +6,18 @@
     <h2>{{ olympiad.name }}</h2>
     <p class="description">{{ olympiad.description }}</p>
 
-    <button (click)="goToRegister()" class="register-btn">Зарегистрироваться</button>
+    <div *ngIf="isCompleted()">
+      <p><strong>Status:</strong> Completed</p>
+      <p *ngIf="olympiad.winner">
+        <strong>Winner:</strong> {{ olympiad.winner }}
+      </p>
+    </div>
+    
+    <div *ngIf="!isCompleted()">
+      <p><strong>Status:</strong> Upcoming</p>
+      <button (click)="goToRegister()" class="register-btn">Register</button>
+    </div>
+
   </div>
 
   <div *ngIf="!olympiad" class="loading">

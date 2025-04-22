@@ -17,6 +17,8 @@ class Olympiad(models.Model):
     field = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     date = models.DateField(default=date.today)
+    winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
 
     def __str__(self):
         return self.name

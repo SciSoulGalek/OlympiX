@@ -54,4 +54,8 @@ export class RegistrationComponent implements OnInit {
       }
     });
   }
+
+  goBack() {
+    this.router.navigate([`/olympiad/${this.olympiadId}`]);
+  }
 }

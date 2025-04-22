@@ -17,6 +17,7 @@ class NewsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OlympiadSerializer(serializers.ModelSerializer):
+    winner = serializers.StringRelatedField()
     class Meta:
         model = Olympiad
         fields = '__all__'

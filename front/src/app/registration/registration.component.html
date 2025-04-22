@@ -1,3 +1,5 @@
+<button (click)="goBack()" class="back-btn">← Назад к списку</button>
+
 <form (submit)="register(); $event.preventDefault()">
   <label>Why do you want to join?</label>
   <input [(ngModel)]="answers['question1']" name="question1" required />

@@ -23,34 +23,39 @@ interface Olympiad {
 })
 
 export class ListpageComponent implements OnInit {
-  fields: string[] = ['All fields', 'Math', 'Science', 'Programming', 'Art'];
-  selectedField: string = '';
+  fields: string[] = ['All fields', 'Math', 'Science', 'Programming', 'Art', 'Sports', 'History', 'Music'];
+  selectedField: string = 'All fields';
   search: string = '';
 
   olympiads: Olympiad[] = [];
   filteredOlympiads: Olympiad[] = [];
+  
+  selectedTab = 'future';
 
   constructor(private dataService: DataService, public auth: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.dataService.getOlympiads().subscribe(data => {
       this.olympiads = data;
-      this.filteredOlympiads = data;
+      this.applyFilters();
     });
-  }
+  }  
 
   applyFilters() {
-    this.filteredOlympiads = this.olympiads.filter(o =>
-      o.name.toLowerCase().includes(this.search.toLowerCase()) &&
-      (this.selectedField ? o.field === this.selectedField : true)
-    );
+    const now = new Date();
+    this.filteredOlympiads = this.olympiads.filter(o => {
+      const matchesSearch = o.name.toLowerCase().includes(this.search.toLowerCase());
+      const matchesField = this.selectedField === 'All fields' || o.field === this.selectedField;
+      const isFuture = new Date(o.date) >= now;
+      const matchesTab = this.selectedTab === 'future' ? isFuture : !isFuture;
+  
+      return matchesSearch && matchesField && matchesTab;
+    });
   }
 
   goToDetail(id: number) {
     this.router.navigate(['/olympiad', id]);
   }
-
-  selectedTab = 'future';
 
   getFilteredOlympiads() {
     const now = new Date();

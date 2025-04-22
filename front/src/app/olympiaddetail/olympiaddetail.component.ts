@@ -39,6 +39,10 @@ export class OlympiaddetailComponent implements OnInit {
     }
   }
 
+  isCompleted(): boolean {
+    return new Date(this.olympiad.date) < new Date();
+  }
+
   goToRegister() {
     this.dataService.setOlympiad(this.olympiad);
     this.router.navigate(['/register', this.olympiad.id]);
