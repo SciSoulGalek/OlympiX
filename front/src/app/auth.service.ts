@@ -18,6 +18,13 @@ export class AuthService {
     });
   }
 
+  register(username: string, password: string) {
+    return this.http.post<any>('http://localhost:8000/api/register/', {
+      username,
+      password
+    });
+  }
+
   saveToken(token: string) {
     localStorage.setItem('token', token);
   }

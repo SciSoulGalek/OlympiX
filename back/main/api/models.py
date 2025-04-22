@@ -6,7 +6,7 @@ class News(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     full_text = models.TextField(blank=True)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField(default=date.today)
 
     def __str__(self):
         return self.title
